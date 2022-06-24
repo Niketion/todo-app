@@ -3,6 +3,7 @@
     <ul class="nav">
       <li><router-link :to="{ name: 'todo' }">App</router-link></li>
       <li><router-link :to="{ name: 'login' }">Login</router-link></li>
+      <li><router-link :to="{ name: 'completed' }">Completati</router-link></li>
     </ul>
 
     <router-view></router-view>

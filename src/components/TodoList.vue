@@ -4,7 +4,7 @@
             placeholder="Cosa devi fare?"
             v-model="newTitle"
             @keyup.enter="addTodo">
-        <todo-item v-for="todo in todosSaved" :todo="todo" :key="todo.id" @removedTodo="removeTodo">
+        <todo-item v-for="todo in todosSaved" :todo="todo" :key="todo.id" @editDone="doneEdit" @executedTask="executeTask" @removedTodo="removeTodo">
         </todo-item>
     </div>
 </template>
@@ -56,31 +56,23 @@ export default {
             localStorage.setItem('todos', JSON.stringify(this.todos))
         },
 
-        editTodo(todo) {
-            if (document.getElementById(todo.id).innerText == "annulla") {
-                this.cancelEdit(todo)
-                return;
-            }
+        executeTask(id) {
+            const index = this.todos.findIndex((item) => item.id == id)
 
-            this.beforeEditCache = todo.title
-            todo.editing = true;
+            this.todos[index].completed = !this.todos[index].completed;
 
-            document.getElementById(todo.id).innerText = "annulla"
+            localStorage.setItem('todos', JSON.stringify(this.todos))
         },
 
-        cancelEdit(todo) {
-            document.getElementById(todo.id).innerText = "modifica"
-            todo.title = this.beforeEditCache;
-            todo.editing = false;
-        },
+        doneEdit(id) {
+            const todo = this.todos[this.todos.findIndex((item) => item.id == id)]
 
-        doneEdit(todo) {
             if (todo.title.trim().length == 0) {
                 todo.title = this.beforeEditCache;
                 alert("Il campo non può essere vuoto!")
                 return;
             }
-
+        
             localStorage.setItem('todos', JSON.stringify(this.todos))
 
             document.getElementById(todo.id).innerText = "modifica"

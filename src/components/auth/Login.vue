@@ -1,5 +1,5 @@
 <template>
   <div class="flex-center">
-    Content for Login Page
+    Pagina di autenticazione
   </div>
 </template>
