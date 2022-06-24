@@ -24,12 +24,7 @@ export default {
   }
 
   #app {
-    font-family: 'Avenir', Helvetica, Arial, sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    color: #2c3e50;
-    font-size: 24px;
-    height: 100vh;
+    font-family: Arial;
   }
 
   .flex-center {
@@ -42,18 +37,13 @@ export default {
     list-style: none;
     padding: 15px 0;
     margin: 0;
-    justify-content: flex-end;
-    background: #F5F8FA;
-    border-bottom: 1px solid lightgrey;
+    background: darkred;
     margin-bottom: 24px;
   }
 
   .nav a {
-    color: #636b6f;
+    color: white;
     padding: 0 25px;
-    font-size: 14px;
-    font-weight: 600;
-    letter-spacing: .1rem;
     text-decoration: none;
     text-transform: uppercase;
   }
