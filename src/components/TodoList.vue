@@ -64,19 +64,21 @@ export default {
             localStorage.setItem('todos', JSON.stringify(this.todos))
         },
 
-        doneEdit(id) {
-            const todo = this.todos[this.todos.findIndex((item) => item.id == id)]
+        doneEdit(id, newTitle) {
+            const index = this.todos.findIndex((item) => item.id == id)
+
+            this.todos[index].title = newTitle;
+            const todo = this.todos[index]
 
             if (todo.title.trim().length == 0) {
                 todo.title = this.beforeEditCache;
                 alert("Il campo non può essere vuoto!")
                 return;
             }
-        
+
             localStorage.setItem('todos', JSON.stringify(this.todos))
 
             document.getElementById(todo.id).innerText = "modifica"
-            todo.editing = false;
         }
     }
 }

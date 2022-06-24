@@ -52,6 +52,7 @@ export default {
                 this.cancelEdit(this)
                 return;
             }
+
             this.beforeEditCache = this.title
             this.editing = true;
             document.getElementById(this.id).innerText = "annulla"
@@ -64,7 +65,8 @@ export default {
         },
 
         doneEdit() {
-            this.$emit('editDone', this.id)
+            this.editing = false;
+            this.$emit('editDone', this.id, this.title)
         }
     }
 }
