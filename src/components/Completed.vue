@@ -8,22 +8,24 @@
 
     <ul class="todo-completed" v-for="todo in todosCompleted">
         <li>{{todo.title}}</li>
+        <div v-if="todo.user != 'anonimo'" class="author">
+            (completata da {{ todo.user }})
+        </div>
     </ul>
 </div>
 </template>
-
+ 
 <script>
 
 export default {
     name: 'completed-list',
     computed: {
         todosCompleted() {
-            if (localStorage.getItem("todos") == undefined) {
+            if (localStorage.getItem("completed") == undefined) {
                 return [];
             }
 
-            return JSON.parse(localStorage.getItem("todos"))
-                .filter(todo => todo.completed);
+            return JSON.parse(localStorage.getItem("completed"));
         }
     },
 }
@@ -40,6 +42,11 @@ export default {
         margin-top: 10px;
         padding-left: 50px;
         display: flex
+    }
+
+    .author {
+        font-size: 10px;
+        margin-left: 20px;
     }
 
 </style>

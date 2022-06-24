@@ -1,10 +1,13 @@
 <template>
     <div>
-        <input type="text" class="todo-input" 
-            placeholder="Cosa devi fare?"
-            v-model="newTitle"
+        <input type="text" class="todo-input" placeholder="Cosa devi fare?" 
+            v-model="newTitle" 
             @keyup.enter="addTodo">
-        <todo-item v-for="todo in todosSaved" :todo="todo" :key="todo.id" @editDone="doneEdit" @executedTask="executeTask" @removedTodo="removeTodo">
+
+        <todo-item v-for="todo in todosSaved" :todo="todo" :key="todo.id" 
+            @editDone="doneEdit" 
+            @executedTask="executeTask" 
+            @removedTodo="removeTodo">
         </todo-item>
     </div>
 </template>
@@ -28,44 +31,66 @@ export default {
     data() {
         return {
             newTitle: '',
-            newID: 1,
-            todos: []
+            todos: [],
+            completed: []
         }
     },
     methods: {
         addTodo() {
             if (this.newTitle.trim().length == 0) return
-            
+            if (localStorage.getItem("lastID") == undefined) localStorage.setItem("lastID", 1)
+
             this.todos.push({
-                id: this.newID,
+                id: localStorage.getItem("lastID"),
                 title: this.newTitle,
                 completed: false,
+                author: sessionStorage.getItem("user") == undefined ? "anonimo" : sessionStorage.getItem("user"),
                 editing: false
             })
 
             localStorage.setItem('todos', JSON.stringify(this.todos))
 
-            this.newID++;
+            localStorage.setItem("lastID", parseInt(localStorage.getItem("lastID"))+1);
             this.newTitle = ''
         },
 
         removeTodo(id) {
-            const index = this.todos.findIndex((item) => item.id == id)
+            const index = this.indexFromID(id);
+            const indexCompleted = this.completed.findIndex((item) => item.id == id)
+
             this.todos.splice(index, 1)
+            this.completed.splice(indexCompleted, 1)
 
             localStorage.setItem('todos', JSON.stringify(this.todos))
+            localStorage.setItem('completed', JSON.stringify(this.completed));
         },
 
         executeTask(id) {
-            const index = this.todos.findIndex((item) => item.id == id)
+            const index = this.indexFromID(id);
+            const todo = this.todos[index]
 
             this.todos[index].completed = !this.todos[index].completed;
+
+            if (this.todos[index].completed) {
+                const name = sessionStorage.getItem("user") == null ? "anonimo" : sessionStorage.getItem("user");
+
+                if (localStorage.getItem("completed") == undefined) localStorage.setItem("completed", [])
+                else this.completed = JSON.parse(localStorage.getItem("completed"));
+                
+                this.completed.push({
+                    id: todo.id,
+                    user: name,
+                    title: todo.title
+                })
+
+                localStorage.setItem("completed", JSON.stringify(this.completed))
+            }
 
             localStorage.setItem('todos', JSON.stringify(this.todos))
         },
 
         doneEdit(id, newTitle) {
-            const index = this.todos.findIndex((item) => item.id == id)
+            const index = this.indexFromID(id);
 
             this.todos[index].title = newTitle;
             const todo = this.todos[index]
@@ -79,6 +104,10 @@ export default {
             localStorage.setItem('todos', JSON.stringify(this.todos))
 
             document.getElementById(todo.id).innerText = "modifica"
+        },
+
+        indexFromID(id) {
+            return this.todos.findIndex((item) => item.id == id);
         }
     }
 }

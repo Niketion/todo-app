@@ -3,9 +3,15 @@
         <input class="todo-checkbox" type="checkbox" v-model="completed" @click="executeTask()">
         <div class="todo-item-left">
             <div v-if="!editing" class="todo-item-label" :class="{ completed : completed }">
-                {{ title }}
+                {{ title }} 
             </div>
             <input v-else @keyup.enter="doneEdit()" class="todo-item-edit" type="text" v-model="title">
+        </div>
+
+        <div class="todo-author">
+            <div v-if="author != 'anonimo'">
+                (aggiunto da: {{ author }})
+            </div>
         </div>
 
         <div class="edit-item">
@@ -35,6 +41,7 @@ export default {
             'title': this.todo.title,
             'completed': this.todo.completed,
             'editing': this.todo.editing,
+            'author': this.todo.author,
             'beforeEditCache': '',
         }
     },
@@ -71,3 +78,11 @@ export default {
     }
 }
 </script>
+
+<style>
+
+    .todo-author {
+        font-size: 10px;
+        margin-left: 20px;
+    }
+</style>
