@@ -4,7 +4,7 @@
             placeholder="Cosa devi fare?"
             v-model="newTitle"
             @keyup.enter="addTodo">
-        <todo-item v-for="todo in this.todos" :todo="todo" :key="todo.id" @removedTodo="removeTodo">
+        <todo-item v-for="todo in todosSaved" :todo="todo" :key="todo.id" @removedTodo="removeTodo">
         </todo-item>
     </div>
 </template>
@@ -16,6 +16,14 @@ export default {
     name: 'todo-list',
     components: {
         TodoItem,
+    },
+    computed: {
+        todosSaved() {
+            if (localStorage.getItem("todos") == undefined) this.todos = []
+            else this.todos = JSON.parse(localStorage.getItem("todos"))
+            
+            return this.todos;
+        }
     },
     data() {
         return {
@@ -35,6 +43,8 @@ export default {
                 editing: false
             })
 
+            localStorage.setItem('todos', JSON.stringify(this.todos))
+
             this.newID++;
             this.newTitle = ''
         },
@@ -42,6 +52,8 @@ export default {
         removeTodo(id) {
             const index = this.todos.findIndex((item) => item.id == id)
             this.todos.splice(index, 1)
+
+            localStorage.setItem('todos', JSON.stringify(this.todos))
         },
 
         editTodo(todo) {
@@ -69,6 +81,8 @@ export default {
                 return;
             }
 
+            localStorage.setItem('todos', JSON.stringify(this.todos))
+
             document.getElementById(todo.id).innerText = "modifica"
             todo.editing = false;
         }
@@ -83,7 +97,12 @@ export default {
     display: flex;
 }
 
+.todo-item-label {
+    font-size: 14px
+}
+
 .todo-checkbox {
+    margin-left: 20px;
     margin-right: 10px;
 }
 
@@ -100,6 +119,10 @@ export default {
 .completed {
     text-decoration: line-through;
     color: grey;
+}
+
+.todo-input {
+    margin-left: 20px
 }
 
 </style>
