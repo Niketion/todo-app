@@ -34,6 +34,15 @@
 export default {
     name: 'completed-list',
     computed: {
+        /**
+         * ! This is the ugliest function I have ever created, sorry
+         * Its main function is to take the "completed" list, but it is filtered by:
+         * <li> 1. Select author
+         * <li> 2. Search bar title
+         * <li> 3. Search bar author
+         * 
+         * TODO: make it more beautiful
+         */
         todosCompleted() {
             if (localStorage.getItem("completed") == undefined) return [];
             
@@ -61,6 +70,10 @@ export default {
             return JSON.parse(localStorage.getItem("completed"))
                 .filter(task => task.user == this.selected)
         },
+
+        /**
+         * Collects users 
+         */
         users() {
             if (localStorage.getItem("users") == undefined) return []
             

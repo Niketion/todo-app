@@ -21,6 +21,10 @@ export default {
         TodoItem,
     },
     computed: {
+        /** 
+         * I collect all todos from the localStorage 
+         * to show them on the home page
+         */
         todosSaved() {
             if (localStorage.getItem("todos") == undefined) this.todos = []
             else this.todos = JSON.parse(localStorage.getItem("todos"))
@@ -36,6 +40,12 @@ export default {
         }
     },
     methods: {
+        /**
+        * When a todo is added it's saved in the localStorage, 
+        * the "newTitle" is passed via the v-model and is reset every time 
+        * the function is called, the "lastID" is saved in the localStorage 
+        * because every time the page is changed (vue-router too) it's reset
+        */
         addTodo() {
             if (this.newTitle.trim().length == 0) return
             if (localStorage.getItem("lastID") == undefined) localStorage.setItem("lastID", 1)
@@ -54,6 +64,14 @@ export default {
             this.newTitle = ''
         },
 
+
+        /**
+         * Remove todo from the todos and completed list, are two separate 
+         * lists, one is used for "TodoList" another for "Completed"
+         * 
+         * @see indexFromID
+         * @param {number} id - Todo's ID
+         */
         removeTodo(id) {
             const index = this.indexFromID(id);
             const indexCompleted = this.completed.findIndex((item) => item.id == id)
@@ -65,6 +83,15 @@ export default {
             localStorage.setItem('completed', JSON.stringify(this.completed));
         },
 
+        /**
+         * This function is called when the checkbox 
+         * is clicked, the todo is automatically set into the "completed" 
+         * list that will be displayed on the appropriate page
+         * ! If the user is not specified it's set anonymous
+         * 
+         * @see indexFromID
+         * @param {number} id - Todo's ID
+         */
         executeTask(id) {
             const index = this.indexFromID(id);
             const todo = this.todos[index]
@@ -89,6 +116,13 @@ export default {
             localStorage.setItem('todos', JSON.stringify(this.todos))
         },
 
+        /**
+         * Called when you have edited the todo (via the edit button)
+         * 
+         * @see indexFromID
+         * @param {*} id - Todo's ID
+         * @param {*} newTitle - Todo's new title
+         */
         doneEdit(id, newTitle) {
             const index = this.indexFromID(id);
 
@@ -106,6 +140,11 @@ export default {
             document.getElementById(todo.id).innerText = "modifica"
         },
 
+        /**
+         * Via the todo's id takes the index
+         * 
+         * @param {number} id - Todo's ID
+         */
         indexFromID(id) {
             return this.todos.findIndex((item) => item.id == id);
         }

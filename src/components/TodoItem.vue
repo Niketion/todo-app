@@ -46,14 +46,23 @@ export default {
         }
     },
     methods: {
+        /**
+         * @see TodoList#executeItem
+         */
         executeTask() {
             this.$emit('executedTask', this.id)
         },
 
+        /**
+         * @see TodoList#removeTodo
+         */
         removeTodo() {
             this.$emit('removedTodo', this.id)
         },
 
+        /**
+         * Called when the "modifica" button is clicked
+         */
         editTodo() {
             if (document.getElementById(this.id).innerText == "annulla") {
                 this.cancelEdit(this)
@@ -65,14 +74,20 @@ export default {
             document.getElementById(this.id).innerText = "annulla"
         },
 
+        /**
+         * Called when the "annulla" button is clicked
+         */
         cancelEdit() {
             document.getElementById(this.id).innerText = "modifica"
             this.title = this.beforeEditCache;
             this.editing = false;
         },
 
+        /**
+         * @see TodoList#doneEdit
+         */
         doneEdit() {
-            this.editing = false;
+            this.editing = false; // If I don't change here the editing doesn't finish the input
             this.$emit('editDone', this.id, this.title)
         }
     }

@@ -28,12 +28,22 @@ export default {
     }
   },
   computed: {
+    /**
+     * Check if the user is logged in from sessionStorage, 
+     * if a value is present they are logged in
+     */
     logged() {
       if (sessionStorage.getItem("user") == undefined) return false;
       else return true;      
     }
   },
   methods: {
+    /**
+     * The operation of "login" is set a user in the sessionStorage, 
+     * in logout it is simply removed. If it isn't in the 
+     * "users" list in localStorage it is added, for select in "Completed"
+     * @see logout
+     */
     setUser() {
       if (localStorage.getItem("users") != undefined) {
         this.users = JSON.parse(localStorage.getItem("users"))
@@ -46,10 +56,17 @@ export default {
         localStorage.setItem("users", JSON.stringify(this.users));
       }
       
+      /**
+       * Remove the user from the sessionStorage, 
+       * reload the page to run the authentication
+       */
       sessionStorage.setItem("user", this.user)
-      document.getElementById("input").innerHTML = "Autenticato con successo!";
+      window.location.reload();
     },
 
+    /**
+     * Remove the user from the sessionStorage
+     */
     logout() {
       sessionStorage.removeItem("user");
       window.location.reload();
