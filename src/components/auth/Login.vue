@@ -24,6 +24,7 @@ export default {
   data() {
     return {
       user: '',
+      users: []
     }
   },
   computed: {
@@ -34,6 +35,17 @@ export default {
   },
   methods: {
     setUser() {
+      if (localStorage.getItem("users") != undefined) {
+        this.users = JSON.parse(localStorage.getItem("users"))
+      }
+
+      if (this.users.filter(user => user.name == this.user).length == 0) {
+        this.users.push({
+          name: this.user
+        })
+        localStorage.setItem("users", JSON.stringify(this.users));
+      }
+      
       sessionStorage.setItem("user", this.user)
       document.getElementById("input").innerHTML = "Autenticato con successo!";
     },
