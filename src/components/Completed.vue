@@ -4,6 +4,9 @@
         task completate
     </div>
     
+    <div class="filter-input">
+        <input v-model="filter" placeholder="Cerca tra le task">
+    </div>
 
     <div class="select-user">
         <div class="select-text">Hai selezionato: {{ selected }}</div>
@@ -35,10 +38,28 @@ export default {
             if (localStorage.getItem("completed") == undefined) return [];
             
             if (this.selected == "Tutti") {
+                if (this.filter != "") {
+                    return JSON.parse(localStorage.getItem("completed"))
+                    .filter(task => 
+                        task.title.toLowerCase().includes(this.filter.toLowerCase()) || 
+                        task.user.toLowerCase().includes(this.filter.toLowerCase())
+                    )
+                }
+
                 return JSON.parse(localStorage.getItem("completed"));
             }
             
-            return JSON.parse(localStorage.getItem("completed")).filter(task => task.user == this.selected)
+            if (this.filter != "") {
+                return JSON.parse(localStorage.getItem("completed"))
+                    .filter(task => task.user == this.selected)
+                    .filter(task => 
+                    task.title.toLowerCase().includes(this.filter.toLowerCase()) ||
+                    task.user.toLowerCase().includes(this.filter.toLowerCase())
+                )
+            }
+
+            return JSON.parse(localStorage.getItem("completed"))
+                .filter(task => task.user == this.selected)
         },
         users() {
             if (localStorage.getItem("users") == undefined) return []
@@ -49,6 +70,7 @@ export default {
     data() {
         return {
             selected: 'Tutti',
+            filter: ''
         }
     }
 }
@@ -80,6 +102,11 @@ export default {
     .select-user {
         margin-left: 20px;
         margin-bottom: 20px;
+    }
+
+    .filter-input {
+        margin-bottom: 20px;
+        margin-left: 20px;
     }
 
 </style>
